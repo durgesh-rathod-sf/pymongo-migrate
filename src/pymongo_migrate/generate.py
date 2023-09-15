@@ -48,13 +48,14 @@ def generate_migration_module_in_dir(
     migration_dir: Path, name: str = "", *args, **kwargs
 ) -> Path:
     now = datetime.datetime.utcnow()
+    now = f"{now:%Y%m%d%H%M%S}"
     if not name:
-        name = f"{now:%Y%m%d%H%M%S}"
+        name = now
         description = kwargs.get("description")
         if description:
             name = f"{name}_{slugify(description)}"
         name = name[:MAX_NAME_LEN]
-    file_path = migration_dir / f"{name}.py"
+    file_path = migration_dir / f"{now}_{name}.py"  # file name will have a prefixed datetime stamp with it
     if file_path.exists():
         raise FileExistsError(f"{file_path} already exists")
 
